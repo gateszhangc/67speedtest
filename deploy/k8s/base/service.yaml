@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-67speedtest
+  labels:
+    app.kubernetes.io/name: 67speedtest
+    app.kubernetes.io/part-of: 67speedtest
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: 67speedtest
+    app.kubernetes.io/part-of: 67speedtest
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+

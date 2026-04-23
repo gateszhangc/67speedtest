@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: 67speedtest
+  labels:
+    app.kubernetes.io/name: 67speedtest
+    app.kubernetes.io/part-of: 67speedtest
+

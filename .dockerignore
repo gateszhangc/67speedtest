@@ -1,10 +1,11 @@
 .git
 .github
 node_modules
-playwright-report
 test-results
 tasks
 brand
-scripts
 tests
-npm-debug.log*
+playwright.config.js
+package-lock.json
+package.json
+

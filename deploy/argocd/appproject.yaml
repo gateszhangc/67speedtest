@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: 67speedtest
+  namespace: argocd
+spec:
+  description: 67speedtest application managed directly from the application repository
+  sourceRepos:
+    - https://github.com/gateszhangc/67speedtest.git
+  destinations:
+    - namespace: 67speedtest
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
+

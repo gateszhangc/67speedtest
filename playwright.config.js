@@ -8,7 +8,8 @@ module.exports = defineConfig({
   },
   use: {
     baseURL: "http://127.0.0.1:4174",
-    trace: "on-first-retry"
+    trace: "on-first-retry",
+    screenshot: "only-on-failure"
   },
   webServer: {
     command: "PORT=4174 node server.js",
@@ -17,3 +18,4 @@ module.exports = defineConfig({
     timeout: 120_000
   }
 });
+

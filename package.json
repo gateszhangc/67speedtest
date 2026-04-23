@@ -1,8 +1,8 @@
 {
-  "name": "artemis-2-wallpaper",
+  "name": "67speedtest",
   "version": "1.0.0",
   "private": true,
-  "description": "Static Artemis II wallpaper site built from publicly released NASA imagery.",
+  "description": "Static SEO site for the viral 67 speed test challenge.",
   "scripts": {
     "start": "node server.js",
     "test": "playwright test",
@@ -12,3 +12,4 @@
     "@playwright/test": "^1.54.2"
   }
 }
+

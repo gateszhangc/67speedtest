@@ -1,0 +1,12 @@
+# Redline Signal
+
+Redline Signal treats motion as something engineered rather than merely observed. Form should feel tuned, calibrated, and pushed right to the edge of failure: tight arcs, disciplined diagonals, measured repetition, and sharp numeric anchors that imply performance without explaining it. Space is not empty here; it is the charged air around a machine at full load. Every interval, every offset, every contour should appear meticulously crafted, refined through countless passes, and resolved with the kind of precision that only comes from deep expertise.
+
+Color in this movement behaves like a warning system. Dense charcoal fields carry the weight, while red-orange heat signatures and controlled amber highlights flash through the composition like instrument lights at a critical threshold. Avoid rainbow novelty and avoid softness. The palette should feel purposeful, industrial, and exacting, as though each hue was selected with painstaking attention to contrast, legibility, and emotional pressure. The finished work must read as master-level execution, not decoration.
+
+Scale should alternate between compressed detail and sudden impact. Small technical marks, hairline rules, and repeated ticks establish rhythm; then one bold numeral, one ring, or one slice of luminous color should take over the field. This contrast creates the sensation of acceleration. Repetition matters, but it must never feel automated. It should look labored over, hand-tuned, and obsessively balanced, the product of someone at the top of their field who understands restraint as well as force.
+
+Composition should imply measurement without becoming a diagram. Circular traces can suggest a timer, lane lines can hint at a track, and stacked bars can evoke live telemetry, but these references stay subtle and embedded. The conceptual thread is the instant just before a number locks in: anticipation, tension, release. Typography is sparse and structural. Words do not narrate; they act like labels on a performance instrument. The total effect should feel museum-clean, painstakingly aligned, and impossible to dismiss as casual work.
+
+The final artifacts must look as if they were built with relentless care. Refine what exists before adding more. Sharpen spacing, polish proportion, deepen balance, and let the craft show through every edge. Redline Signal is not about loudness for its own sake. It is about making velocity feel inevitable through master-level control.
+

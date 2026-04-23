@@ -1,36 +1,29 @@
 const { test, expect } = require("@playwright/test");
 
-test.describe("Artemis II wallpaper site", () => {
-  test("desktop homepage renders key content and filters wallpapers", async ({ page }) => {
+test.describe("67 Speed Test static site", () => {
+  test("desktop homepage renders key content and interactions", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page).toHaveTitle(/Artemis II Wallpaper/i);
-    await expect(page.locator("h1")).toHaveText("Artemis II Wallpaper");
-    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /publicly released NASA mission imagery/i);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://artemis-2-wallpaper.lol/");
+    await expect(page).toHaveTitle(/67 Speed Test/i);
+    await expect(page.locator("h1")).toContainText("67 Speed Test");
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /viral 20-second arm-speed challenge/i);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://67speedtest.lol/");
+    await expect(page.locator(".brand-wordmark")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Expand preview" })).toBeVisible();
 
-    const wallpaperCards = page.locator(".wallpaper-card");
-    await expect(wallpaperCards).toHaveCount(10);
-    await expect(page.getByText("Not an official NASA website.")).toBeVisible();
+    await page.getByRole("link", { name: "Start 67 Speed Test" }).click();
+    await expect(page.locator("#game")).toBeInViewport();
 
-    await page.getByRole("button", { name: "Posters" }).click();
-    await expect(page.locator(".wallpaper-card:not([hidden])")).toHaveCount(2);
-    await expect(page.locator("[data-results-count]")).toHaveText("Showing 2 wallpapers");
+    await page.getByRole("button", { name: /What is the 67 speed test/i }).click();
+    await expect(page.getByText(/camera-based arm-speed challenge/i)).toBeVisible();
 
-    await page.getByRole("button", { name: "All" }).click();
-    await expect(page.locator(".wallpaper-card:not([hidden])")).toHaveCount(10);
-
-    for (const image of await page.locator("img").all()) {
-      await image.scrollIntoViewIfNeeded();
-    }
-
-    const imagesLoaded = await page.evaluate(() =>
+    const imageLoadState = await page.evaluate(() =>
       Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0)
     );
-    expect(imagesLoaded).toBe(true);
+    expect(imageLoadState).toBe(true);
   });
 
-  test("mobile layout stays within viewport and keeps gallery accessible", async ({ browser }) => {
+  test("mobile layout keeps navigation and faq usable without overflow", async ({ browser }) => {
     const context = await browser.newContext({
       viewport: { width: 390, height: 844 },
       isMobile: true
@@ -39,17 +32,17 @@ test.describe("Artemis II wallpaper site", () => {
 
     await page.goto("/");
 
-    await expect(page.locator("h1")).toBeVisible();
-    await expect(page.getByRole("link", { name: "Explore the Collection" })).toBeVisible();
-    await page.getByRole("link", { name: "Explore the Collection" }).click();
-    await expect(page.locator("#gallery")).toBeInViewport();
+    await page.getByRole("button", { name: "Open navigation menu" }).click();
+    await expect(page.locator("#navLinks").getByRole("link", { name: "Modes" })).toBeVisible();
+    await page.locator("#navLinks").getByRole("link", { name: "FAQ" }).click();
+    await expect(page.locator("#faq")).toBeInViewport();
 
-    const overflow = await page.evaluate(() => {
-      return document.documentElement.scrollWidth - window.innerWidth;
-    });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(1);
 
-    await expect(page.locator(".wallpaper-card")).toHaveCount(10);
+    await page.getByRole("button", { name: /How do I improve my 67 speed test score fast/i }).click();
+    await expect(page.getByText(/brighter light, fixed camera/i)).toBeVisible();
+
     await context.close();
   });
 });

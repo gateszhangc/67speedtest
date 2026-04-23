@@ -1,41 +1,88 @@
-const topbar = document.querySelector("[data-topbar]");
-const filterButtons = Array.from(document.querySelectorAll(".filter-button"));
-const wallpaperCards = Array.from(document.querySelectorAll(".wallpaper-card"));
-const resultsCount = document.querySelector("[data-results-count]");
-const yearNode = document.querySelector("#current-year");
+const nav = document.getElementById("nav");
+const navLinks = document.getElementById("navLinks");
+const hamburger = document.getElementById("hamburger");
+const gameWrapper = document.getElementById("gameWrapper");
+const gameExpand = document.getElementById("gameExpand");
 
-const updateResults = (filter) => {
-  let visible = 0;
-
-  wallpaperCards.forEach((card) => {
-    const tags = (card.dataset.tags || "").split(" ");
-    const matches = filter === "all" || tags.includes(filter);
-    card.hidden = !matches;
-    if (matches) visible += 1;
-  });
-
-  if (resultsCount) {
-    resultsCount.textContent = `Showing ${visible} wallpaper${visible === 1 ? "" : "s"}`;
-  }
+const syncNavShadow = () => {
+  nav.classList.toggle("is-scrolled", window.scrollY > 20);
 };
 
-filterButtons.forEach((button) => {
+const closeMenu = () => {
+  navLinks.classList.remove("is-open");
+  hamburger.classList.remove("is-open");
+  hamburger.setAttribute("aria-expanded", "false");
+  document.body.classList.remove("menu-open");
+};
+
+syncNavShadow();
+window.addEventListener("scroll", syncNavShadow, { passive: true });
+
+hamburger.addEventListener("click", () => {
+  const nextOpen = !navLinks.classList.contains("is-open");
+  navLinks.classList.toggle("is-open", nextOpen);
+  hamburger.classList.toggle("is-open", nextOpen);
+  hamburger.setAttribute("aria-expanded", String(nextOpen));
+  document.body.classList.toggle("menu-open", nextOpen);
+});
+
+document.querySelectorAll(".nav-links a").forEach((link) => {
+  link.addEventListener("click", closeMenu);
+});
+
+document.addEventListener("click", (event) => {
+  if (!nav.contains(event.target)) {
+    closeMenu();
+  }
+});
+
+gameExpand.addEventListener("click", () => {
+  const expanded = !gameWrapper.classList.contains("is-expanded");
+  gameWrapper.classList.toggle("is-expanded", expanded);
+  document.body.classList.toggle("preview-open", expanded);
+  gameExpand.setAttribute("aria-label", expanded ? "Collapse preview" : "Expand preview");
+  gameExpand.textContent = expanded ? "×" : "⛶";
+});
+
+document.querySelectorAll(".faq-item").forEach((item) => {
+  const button = item.querySelector(".faq-q");
+  button.setAttribute("aria-expanded", "false");
+
   button.addEventListener("click", () => {
-    filterButtons.forEach((entry) => entry.classList.remove("is-active"));
-    button.classList.add("is-active");
-    updateResults(button.dataset.filter || "all");
+    const isOpen = item.classList.contains("is-open");
+
+    document.querySelectorAll(".faq-item").forEach((entry) => {
+      entry.classList.remove("is-open");
+      entry.querySelector(".faq-q").setAttribute("aria-expanded", "false");
+    });
+
+    item.classList.toggle("is-open", !isOpen);
+    button.setAttribute("aria-expanded", String(!isOpen));
   });
 });
 
-if (yearNode) {
-  yearNode.textContent = new Date().getFullYear();
-}
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && gameWrapper.classList.contains("is-expanded")) {
+    gameWrapper.classList.remove("is-expanded");
+    document.body.classList.remove("preview-open");
+    gameExpand.setAttribute("aria-label", "Expand preview");
+    gameExpand.textContent = "⛶";
+  }
+});
 
-const handleScroll = () => {
-  if (!topbar) return;
-  topbar.classList.toggle("is-scrolled", window.scrollY > 12);
-};
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+      }
+    });
+  },
+  {
+    threshold: 0.15
+  }
+);
 
-window.addEventListener("scroll", handleScroll, { passive: true });
-handleScroll();
-updateResults("all");
+document.querySelectorAll(".fade-in").forEach((element) => {
+  observer.observe(element);
+});
