@@ -90,7 +90,7 @@ jobs:
                           path: config.json
                 initContainers:
                   - name: checkout
-                    image: alpine/git:2.47.2
+                    image: alpine/git:latest
                     command:
                       - /bin/sh
                       - -lc
@@ -105,33 +105,19 @@ jobs:
                       - name: workspace
                         mountPath: /workspace
                 containers:
-                  - name: buildkit
-                    image: moby/buildkit:v0.24.0-rootless
-                    env:
-                      - name: BUILDKITD_FLAGS
-                        value: --oci-worker-no-process-sandbox
-                      - name: DOCKER_CONFIG
-                        value: /home/user/.docker
-                    command:
-                      - /bin/sh
-                      - -lc
+                  - name: kaniko
+                    image: gcr.io/kaniko-project/executor:v1.23.2-debug
                     args:
-                      - |
-                        set -eux
-                        buildctl-daemonless.sh build \
-                          --frontend dockerfile.v0 \
-                          --local context=/workspace/repo \
-                          --local dockerfile=/workspace/repo \
-                          --opt filename=Dockerfile \
-                          --output type=image,name=${IMAGE_NAME}:${IMAGE_TAG},push=true
-                    securityContext:
-                      runAsUser: 1000
-                      runAsGroup: 1000
+                      - --context=dir:///workspace/repo
+                      - --dockerfile=/workspace/repo/Dockerfile
+                      - --destination=${IMAGE_NAME}:${IMAGE_TAG}
+                      - --cache=true
+                      - --cache-repo=${IMAGE_NAME}-cache
                     volumeMounts:
                       - name: workspace
                         mountPath: /workspace
                       - name: docker-config
-                        mountPath: /home/user/.docker
+                        mountPath: /kaniko/.docker
           EOF
 
           kubectl wait --for=condition=complete "job/${JOB_NAME}" -n "$BUILD_NAMESPACE" --timeout=30m
@@ -146,7 +132,7 @@ jobs:
           POD_NAME="$(kubectl get pod -n "$BUILD_NAMESPACE" -l job-name="$JOB_NAME" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)"
           if [ -n "$POD_NAME" ]; then
             kubectl logs -n "$BUILD_NAMESPACE" "$POD_NAME" -c checkout || true
-            kubectl logs -n "$BUILD_NAMESPACE" "$POD_NAME" -c buildkit || true
+            kubectl logs -n "$BUILD_NAMESPACE" "$POD_NAME" -c kaniko || true
           fi
 
       - name: Delete build job
@@ -201,4 +187,3 @@ jobs:
           git add "$KUSTOMIZATION_PATH"
           git commit -m "chore: release ${IMAGE_TAG} [skip ci]"
           git push origin HEAD:main
-
