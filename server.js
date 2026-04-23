@@ -77,10 +77,13 @@ const server = http.createServer((request, response) => {
     pathname = "/index.html";
   }
 
+  if (pathname === "/favicon.ico") {
+    pathname = "/assets/brand/favicon.ico";
+  }
+
   serveFile(pathname, response);
 });
 
 server.listen(port, host, () => {
   console.log(`Static site listening on http://${host}:${port}`);
 });
-

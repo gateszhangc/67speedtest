@@ -21,6 +21,9 @@ test.describe("67 Speed Test static site", () => {
       Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0)
     );
     expect(imageLoadState).toBe(true);
+
+    const faviconResponse = await page.request.get("/favicon.ico");
+    expect(faviconResponse.ok()).toBe(true);
   });
 
   test("mobile layout keeps navigation and faq usable without overflow", async ({ browser }) => {
