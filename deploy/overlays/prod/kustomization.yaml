@@ -8,4 +8,4 @@ resources:
   - registry-auth-sealedsecret.yaml
 images:
   - name: registry.144.91.77.245.sslip.io/67speedtest
-    newTag: 87836d4a1b4b9d634dc35e0a6956c2bbfd004986
+    newTag: 6c8e500078cf3d8dffbee268132e4fc7d6370fb8
