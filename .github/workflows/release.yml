@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - "deploy/k8s/overlays/prod/kustomization.yaml"
+      - "deploy/overlays/prod/kustomization.yaml"
   workflow_dispatch:
 
 permissions:
@@ -19,7 +19,7 @@ env:
   APP_NAME: 67speedtest
   BUILD_NAMESPACE: build-jobs
   IMAGE_NAME: registry.144.91.77.245.sslip.io/67speedtest
-  KUSTOMIZATION_PATH: deploy/k8s/overlays/prod/kustomization.yaml
+  KUSTOMIZATION_PATH: deploy/overlays/prod/kustomization.yaml
 
 jobs:
   build-and-push:

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: 67speedtest
+  name: 67speedtest-prod
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/gateszhangc/67speedtest.git
     targetRevision: main
-    path: deploy/k8s/overlays/prod
+    path: deploy/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: 67speedtest
