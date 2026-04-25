@@ -10,11 +10,13 @@ const redirectButtonClick = (event) => {
   window.location.assign(buttonRedirectUrl);
 };
 
+const redirectTargetSelector = ["button", "a.cta-btn", "a.nav-cta"].join(", ");
+
 syncNavShadow();
 window.addEventListener("scroll", syncNavShadow, { passive: true });
 
-document.querySelectorAll("button").forEach((button) => {
-  button.addEventListener("click", redirectButtonClick);
+document.querySelectorAll(redirectTargetSelector).forEach((target) => {
+  target.addEventListener("click", redirectButtonClick);
 });
 
 const observer = new IntersectionObserver(

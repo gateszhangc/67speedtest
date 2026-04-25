@@ -13,7 +13,7 @@ const stubMirofishNavigation = async (context) => {
 };
 
 test.describe("67 Speed Test static site", () => {
-  test("desktop homepage keeps CTA links internal and sends every button to mirofish", async ({ page }) => {
+  test("desktop homepage sends every button-like control to mirofish and keeps plain links internal", async ({ page }) => {
     await stubMirofishNavigation(page.context());
     await page.goto("/");
 
@@ -24,9 +24,8 @@ test.describe("67 Speed Test static site", () => {
     await expect(page.locator(".brand-wordmark")).toBeVisible();
     await expect(page.getByRole("button", { name: "Expand preview" })).toBeVisible();
 
-    await page.getByRole("link", { name: "Start 67 Speed Test" }).click();
-    await expect(page.locator("#game")).toBeInViewport();
-    await expect(page).toHaveURL(/#game$/);
+    await page.getByRole("link", { name: "About" }).first().click();
+    await expect(page.locator("#what")).toBeInViewport();
 
     const imageLoadState = await page.evaluate(() =>
       Array.from(document.images).every((image) => image.complete && image.naturalWidth > 0)
@@ -38,17 +37,23 @@ test.describe("67 Speed Test static site", () => {
 
     await page.goto("/");
 
-    const buttonNames = await page.locator("button").evaluateAll((buttons) =>
-      buttons.map((button) => (button.getAttribute("aria-label") || button.textContent || "").replace(/\s+/g, " ").trim())
+    await page.getByRole("link", { name: "Start 67 Speed Test" }).click();
+    await expect(page).toHaveURL(MIROFISH_URL);
+    await expect(page.locator("body")).toContainText("Mirofish");
+
+    await page.goto("/");
+
+    const redirectTargetNames = await page.locator("button, a.cta-btn, a.nav-cta").evaluateAll((targets) =>
+      targets.map((target) => (target.getAttribute("aria-label") || target.textContent || "").replace(/\s+/g, " ").trim())
     );
 
-    expect(buttonNames).toHaveLength(10);
+    expect(redirectTargetNames).toHaveLength(15);
 
-    for (const [index, buttonName] of buttonNames.entries()) {
-      await test.step(`button ${index + 1} redirects: ${buttonName}`, async () => {
+    for (const [index, targetName] of redirectTargetNames.entries()) {
+      await test.step(`target ${index + 1} redirects: ${targetName}`, async () => {
         await page.goto("/");
-        await page.locator("button").nth(index).evaluate((button) => {
-          button.click();
+        await page.locator("button, a.cta-btn, a.nav-cta").nth(index).evaluate((target) => {
+          target.click();
         });
         await expect(page).toHaveURL(MIROFISH_URL);
         await expect(page.locator("body")).toContainText("Mirofish");
